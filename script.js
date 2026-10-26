@@ -216,6 +216,24 @@ function puntos() {
       pts.push({ x: p.x, y: fondo });
     }
   });
+  // Canela: el hilo rodea el título por un costado, cuelga la etiqueta
+  // y luego baja por el margen sin cruzar el texto
+  const ab = window.scrollY - top;
+  const cab = $(".canela-cabeza").getBoundingClientRect();
+  const nom = $(".canela-nombre").getBoundingClientRect();
+  pts.push({ x: movil ? ancho - 12 : Math.min(ancho - 16, nom.right - base.left + 20), y: cab.top + ab + cab.height / 2 });
+  const et = $(".etiqueta .pinza").getBoundingClientRect();
+  const etq = $(".etiqueta").getBoundingClientRect();
+  const e = rel(et);
+  pts.push({ x: e.x, y: e.y + et.height * 0.55 });
+  pts.push({ x: etq.left - base.left + 20, y: etq.bottom + ab - 40 });
+  const txt = $(".canela-texto").getBoundingClientRect();
+  const margen = movil ? 10 : Math.max(16, txt.left - base.left - 60);
+  pts.push({ x: margen, y: txt.top + ab + 10 });
+  pts.push({ x: margen, y: txt.bottom + ab - 10 });
+  const tit = $(".final-titulo").getBoundingClientRect();
+  pts.push({ x: movil ? 10 : Math.max(16, tit.left - base.left - 60), y: tit.top + ab + tit.height / 2 });
+
   const carta = $(".carta .pinza").getBoundingClientRect();
   const c = rel(carta);
   pts.push({ x: c.x, y: c.y + carta.height * 0.55 });
@@ -288,6 +306,7 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 window.addEventListener("resize", programarHilo);
 window.addEventListener("load", programarHilo);
+$(".canela-retrato").addEventListener("load", programarHilo);
 document.fonts && document.fonts.ready.then(programarHilo);
 programarHilo();
 
