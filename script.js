@@ -116,6 +116,9 @@ const capitulos = [
   }
 ];
 
+/* Fotos optimizadas (WebP) con su tamaño, para cargar rápido y sin saltos */
+const fotosWeb = {"ANG_0248.jpg": ["ANG_0248.webp", 920, 613, "#8c7f36"], "DSC_1975.jpg": ["DSC_1975.webp", 920, 518, "#797845"], "IMG-20210104-WA0074.jpg": ["IMG-20210104-WA0074.webp", 553, 737, "#88797b"], "IMG-20210202-WA0013.jpg": ["IMG-20210202-WA0013.webp", 553, 737, "#9b7078"], "IMG-20210803-WA0126.jpg": ["IMG-20210803-WA0126.webp", 589, 737, "#835f54"], "IMG-20220122-WA0007.jpg": ["IMG-20220122-WA0007.webp", 920, 688, "#55433c"], "IMG-20231124-WA0056.jpg": ["IMG-20231124-WA0056.webp", 553, 737, "#4a493c"], "IMG-20231207-WA0057.jpg": ["IMG-20231207-WA0057.webp", 553, 737, "#746c7b"], "IMG-20240203-WA0076.jpg": ["IMG-20240203-WA0076.webp", 546, 737, "#65655e"], "IMG-20240703-WA0165(1).jpg": ["IMG-20240703-WA0165.webp", 553, 737, "#929981"], "IMG-20260413-WA0047.jpg": ["IMG-20260413-WA0047.webp", 920, 690, "#9aa09a"], "IMG_20201102_202030.jpg": ["IMG_20201102_202030.webp", 415, 737, "#68564c"], "IMG_20201129_202426.jpg": ["IMG_20201129_202426.webp", 415, 737, "#766a57"], "IMG_20210111_000640.jpg": ["IMG_20210111_000640.webp", 552, 737, "#877c7e"], "IMG_20210308_205853.jpg": ["IMG_20210308_205853.webp", 552, 737, "#8f7c6c"], "IMG_20210314_191229.jpg": ["IMG_20210314_191229.webp", 920, 688, "#676c70"], "IMG_20210522_194609.jpg": ["IMG_20210522_194609.webp", 552, 737, "#7d343f"], "IMG_20210627_121348.jpg": ["IMG_20210627_121348.webp", 553, 737, "#bab49d"], "IMG_20210704_112810.jpg": ["IMG_20210704_112810.webp", 553, 737, "#7c8581"], "IMG_20211029_194513.jpg": ["IMG_20211029_194513.webp", 552, 737, "#82756d"], "IMG_20211122_215453.jpg": ["IMG_20211122_215453.webp", 491, 737, "#9b5c5d"], "IMG_20220128_232911_216.jpg": ["IMG_20220128_232911_216.webp", 214, 214, "#85664e"], "IMG_20220410_141633.jpg": ["IMG_20220410_141633.webp", 553, 737, "#99ab92"], "IMG_20221026_193312.jpg": ["IMG_20221026_193312.webp", 553, 737, "#94897d"], "IMG_20221201_001623.jpg": ["IMG_20221201_001623.webp", 552, 737, "#4f4742"], "IMG_20221223_235634.jpg": ["IMG_20221223_235634.webp", 523, 737, "#6e6154"], "IMG_20221231_225221.jpg": ["IMG_20221231_225221.webp", 552, 737, "#ae8c6b"], "IMG_20230107_161652.jpg": ["IMG_20230107_161652.webp", 165, 220, "#827a77"], "IMG_20230121_212556.jpg": ["IMG_20230121_212556.webp", 553, 737, "#6c5b57"], "IMG_20231026_194437.jpg": ["IMG_20231026_194437.webp", 553, 737, "#716e5e"], "IMG_20241020_183120.jpg": ["IMG_20241020_183120.webp", 553, 737, "#464b51"], "IMG_20250920_190718_823.jpg": ["IMG_20250920_190718_823.webp", 415, 737, "#77655e"], "IMG_20260104_141740.jpg": ["IMG_20260104_141740.webp", 553, 737, "#807064"], "file_000000006d3881f9be7c688924dfdb0d.jpg": ["file_000000006d3881f9be7c688924dfdb0d.webp", 920, 690, "#7990a5"]};
+
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (s, el = document) => el.querySelector(s);
 
@@ -152,28 +155,22 @@ capitulos.forEach((cap) => {
   cap.fotos.forEach((f) => {
     const lado = idx % 2 === 0 ? "izq" : "der";
     const giro = ((idx * 37) % 7 - 3) * 0.8; // giro suave, distinto en cada foto
+    const [archivo, w, h, tono] = fotosWeb[f.src] || [f.src, 0, 0, "#e9e3ea"];
+    const web = { archivo: encodeURIComponent(archivo), w, h };
+    const forma = (w > h * 1.1 ? " horizontal" : "") + (w && Math.max(w, h) < 300 ? " chiquita" : "");
     const art = document.createElement("article");
     art.className = `recuerdo ${lado}`;
     art.innerHTML = `
-      <button class="polaroid" type="button" style="--giro:${giro}deg" aria-label="Ver foto: ${f.nota}">
+      <button class="polaroid${forma}" type="button" style="--giro:${giro}deg" aria-label="Ver foto: ${f.nota}">
         <span class="pinza" aria-hidden="true"></span>
-        <img src="fotos/${encodeURIComponent(f.src)}" alt="${f.nota}, ${f.fecha.toLowerCase()}" loading="lazy" decoding="async">
+        <img style="background:${tono}" src="fotos/${web.archivo}" width="${web.w}" height="${web.h}" alt="${f.nota}, ${f.fecha.toLowerCase()}" loading="${idx < 2 ? "eager" : "lazy"}" ${idx < 2 ? 'fetchpriority="high"' : ""} decoding="async">
         <span class="nota mano">${f.nota}</span>
       </button>
       <div class="verso">
         <p class="fecha">${f.fecha}</p>
         <p class="poema">${f.poema.replace(/\n/g, "<br>")}</p>
       </div>`;
-    const img = $("img", art);
-    const marcar = () => {
-      const w = img.naturalWidth, h = img.naturalHeight;
-      if (!w) return;
-      const pol = $(".polaroid", art);
-      if (w > h * 1.1) pol.classList.add("horizontal");
-      if (Math.max(w, h) < 300) pol.classList.add("chiquita");
-      programarHilo();
-    };
-    img.complete ? marcar() : img.addEventListener("load", marcar);
+    $("img", art).addEventListener("load", programarHilo);
     $(".polaroid", art).addEventListener("click", () => abrirVisor(f));
     sec.appendChild(art);
     todas.push(art);
@@ -313,7 +310,7 @@ programarHilo();
 /* ---------- Visor de fotos ---------- */
 const visor = $("#visor");
 function abrirVisor(f) {
-  $("#visor-img").src = `fotos/${encodeURIComponent(f.src)}`;
+  $("#visor-img").src = `fotos/${encodeURIComponent((fotosWeb[f.src] || [f.src])[0])}`;
   $("#visor-img").alt = f.nota;
   $("#visor-nota").textContent = f.nota;
   $("#visor-poema").innerHTML = f.poema.replace(/\n/g, "<br>");
