@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feliz cumpleaños, Isa</title>
+  <meta name="description" content="Seis años de nosotros, foto a foto.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+</head>
+<body>
+
+  <header class="hero" id="inicio">
+    <div class="estrellas" aria-hidden="true"></div>
+    <div class="hero-contenido">
+      <p class="para mano">Para Isa, en su cumpleaños</p>
+      <h1 class="hero-titulo">
+        <span class="linea">Seis años</span>
+        <span class="linea">de nosotros</span>
+      </h1>
+      <p class="hero-intro">
+        Dicen que un hilo rojo invisible une a dos personas destinadas a encontrarse.
+        Puede estirarse, puede enredarse, pero nunca se rompe.
+        Este es el nuestro, foto a foto, desde 2020 hasta hoy.
+      </p>
+      <a class="bajar mano" href="#recorrido">Baja despacio, mi amor</a>
+    </div>
+  </header>
+
+  <main class="recorrido" id="recorrido">
+    <svg class="hilo" aria-hidden="true">
+      <path class="hilo-sombra" d=""/>
+      <path class="hilo-trazo" d=""/>
+    </svg>
+    <div id="capitulos"></div>
+
+    <section class="final" id="final">
+      <div class="sol" aria-hidden="true"></div>
+      <h2 class="final-titulo">Feliz cumpleaños, Isa</h2>
+
+      <div class="carta">
+        <span class="pinza" aria-hidden="true"></span>
+        <p>Isa:</p>
+        <p>Seis años y todavía me sorprendes. Gracias por cada risa, por cada abrazo que me arregló el día y por elegirme incluso en los días difíciles. Esta página es apenas un pedacito de lo que hemos vivido; lo mejor nunca cupo en una foto.</p>
+        <p>Hoy celebro que existes, y que de todos los caminos posibles, el tuyo se cruzó con el mío.</p>
+        <p>Te amo hoy, y en todos los capítulos que nos faltan.</p>
+        <p class="firma mano">Sebastián</p>
+      </div>
+
+      <div class="vela-zona">
+        <svg class="vela" id="vela" viewBox="0 0 120 220" aria-hidden="true">
+          <g class="humo">
+            <path d="M60 70 C 52 55, 68 45, 58 28 S 66 8, 60 0" />
+          </g>
+          <g class="llama">
+            <ellipse cx="60" cy="72" rx="20" ry="26" class="halo"/>
+            <path d="M60 46 C 70 62, 72 74, 60 86 C 48 74, 50 62, 60 46 Z" class="fuego"/>
+            <path d="M60 62 C 64 70, 64 76, 60 82 C 56 76, 56 70, 60 62 Z" class="nucleo"/>
+          </g>
+          <line x1="60" y1="86" x2="60" y2="96" class="mecha"/>
+          <rect x="44" y="96" width="32" height="110" rx="4" class="cuerpo"/>
+          <path d="M44 120 L76 108 M44 150 L76 138 M44 180 L76 168" class="rayas"/>
+        </svg>
+        <button class="soplar" id="soplar" type="button">Sopla la vela</button>
+        <p class="deseo" id="deseo" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <p>Hecho con todo mi amor por Sebastián</p>
+  </footer>
+
+  <dialog class="visor" id="visor">
+    <form method="dialog"><button class="cerrar" aria-label="Cerrar">×</button></form>
+    <figure>
+      <img id="visor-img" alt="">
+      <figcaption>
+        <span class="mano" id="visor-nota"></span>
+        <span class="visor-poema" id="visor-poema"></span>
+      </figcaption>
+    </figure>
+  </dialog>
+
+  <div class="petalos" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
